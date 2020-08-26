@@ -1,0 +1,1643 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.5.9">
+    
+    
+      
+        <title>Modeling Dynamic Systems with Dymos - Dymos</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.36ee6aaa.min.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.83bccb1f.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#546d78">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#modeling-dynamic-systems-with-dymos" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="../.." title="Dymos" class="md-header-nav__button md-logo" aria-label="Dymos">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Dymos
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Modeling Dynamic Systems with Dymos
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Dymos" class="md-nav__button md-logo" aria-label="Dymos">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Dymos
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../index.html" title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Getting Started
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Getting Started" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Getting Started
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../collocation.html" title="What is collocation?" class="md-nav__link">
+      What is collocation?
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../optimal_control.html" title="Optimal Control" class="md-nav__link">
+      Optimal Control
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../defining_odes.html" title="Defining ODEs" class="md-nav__link">
+      Defining ODEs
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Modeling Dynamic Systems with Dymos
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="intro_ivp.html" title="Modeling Dynamic Systems with Dymos" class="md-nav__link md-nav__link--active">
+      Modeling Dynamic Systems with Dymos
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-openmdao-model-of-the-ode" class="md-nav__link">
+    The OpenMDAO model of the ODE
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hello-world-propagating-the-dynamics" class="md-nav__link">
+    Hello World: Propagating the dynamics
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happened" class="md-nav__link">
+    What happened?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-is-the-solution-different-from-the-simulation-results" class="md-nav__link">
+    Why is the solution different from the simulation results?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-solver-to-converge-the-physical-trajectory" class="md-nav__link">
+    Using a solver to converge the physical trajectory
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-an-optimization-driver-to-converge-the-physical-trajectory" class="md-nav__link">
+    Using an optimization driver to converge the physical trajectory
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#but-the-solution-still-doesnt-match-the-simulation" class="md-nav__link">
+    But the solution still doesn't match the simulation
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="intro_segments.html" title="Segments of Phases" class="md-nav__link">
+      Segments of Phases
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Examples and Tutorials
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Examples and Tutorials" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Examples and Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/examples.html" title="Dymos by Example" class="md-nav__link">
+      Dymos by Example
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-2" type="checkbox" id="nav-3-2">
+    
+    <label class="md-nav__link" for="nav-3-2">
+      Example Problems
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Example Problems" data-md-level="2">
+      <label class="md-nav__title" for="nav-3-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Example Problems
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/brachistochrone/brachistochrone.html" title="The Brachistochrone" class="md-nav__link">
+      The Brachistochrone
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/vanderpol/vanderpol.html" title="The Van der Pol Oscillator" class="md-nav__link">
+      The Van der Pol Oscillator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/commercial_aircraft/commercial_aircraft.html" title="Commercial Aircraft Range Maximization by Differential Inclusion" class="md-nav__link">
+      Commercial Aircraft Range Maximization by Differential Inclusion
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/double_integrator/double_integrator.html" title="Double Integrator" class="md-nav__link">
+      Double Integrator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/hypersensitive/hypersensitive.html" title="Hyper-Sensitive Problem" class="md-nav__link">
+      Hyper-Sensitive Problem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/finite_burn_orbit_raise/finite_burn_orbit_raise.html" title="Two-Burn Orbit Raise" class="md-nav__link">
+      Two-Burn Orbit Raise
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/length_constrained_brachistochrone/length_constrained_brachistochrone.html" title="The Length-Constrained Brachistochrone" class="md-nav__link">
+      The Length-Constrained Brachistochrone
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/min_time_climb/min_time_climb.html" title="Supersonic Interceptor Minimum Time Climb" class="md-nav__link">
+      Supersonic Interceptor Minimum Time Climb
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/multi_phase_cannonball/multi_phase_cannonball.html" title="Multi-Phase Cannonball" class="md-nav__link">
+      Multi-Phase Cannonball
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/multibranch_trajectory/multibranch_trajectory.html" title="Multibranch Trajectory" class="md-nav__link">
+      Multibranch Trajectory
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/reentry/reentry.html" title="Single-Phase Space Shuttle Reentry" class="md-nav__link">
+      Single-Phase Space Shuttle Reentry
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/ssto_earth/ssto_earth.html" title="SSTO Earth Launch" class="md-nav__link">
+      SSTO Earth Launch
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/ssto_moon_linear_tangent/ssto_moon_linear_tangent.html" title="SSTO Lunar Ascent with Linear Tangent Guidance" class="md-nav__link">
+      SSTO Lunar Ascent with Linear Tangent Guidance
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/ssto_moon_polynomial_controls/ssto_moon_polynomial_controls.html" title="SSTO Lunar Ascent with Polynomial Controls" class="md-nav__link">
+      SSTO Lunar Ascent with Polynomial Controls
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/water_rocket/water_rocket.html" title="Water Rocket" class="md-nav__link">
+      Water Rocket
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Feature Reference
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Feature Reference" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Feature Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-1" type="checkbox" id="nav-4-1">
+    
+    <label class="md-nav__link" for="nav-4-1">
+      Phases
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Phases" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-1">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Phases
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../features/phases/phases.html" title="Phases of a Trajectory" class="md-nav__link">
+      Phases of a Trajectory
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../features/phases/segments.html" title="Segments" class="md-nav__link">
+      Segments
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../features/phases/variables.html" title="Variables" class="md-nav__link">
+      Variables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../features/phases/constraints.html" title="Constraints" class="md-nav__link">
+      Constraints
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../features/phases/objective.html" title="Objective" class="md-nav__link">
+      Objective
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../features/phases/timeseries.html" title="Timeseries Outputs" class="md-nav__link">
+      Timeseries Outputs
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4-2" type="checkbox" id="nav-4-2">
+    
+    <label class="md-nav__link" for="nav-4-2">
+      Trajectories
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Trajectories" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Trajectories
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../features/trajectories/trajectories.html" title="Organizing Phases into Trajectories" class="md-nav__link">
+      Organizing Phases into Trajectories
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../features/exploiting_sparsity.html" title="Exploiting Sparsity for Faster Derivative Calculation" class="md-nav__link">
+      Exploiting Sparsity for Faster Derivative Calculation
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Frequently Asked Questions
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Frequently Asked Questions" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Frequently Asked Questions
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../faq/add_ode_output_to_timeseries.html" title="How do I add an ODE output to the timeseries outputs?" class="md-nav__link">
+      How do I add an ODE output to the timeseries outputs?
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../faq/connect_scalar_parameters_to_ode.html" title="How do I connect a scalar input to the ODE?" class="md-nav__link">
+      How do I connect a scalar input to the ODE?
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../faq/upstream_analysis.html" title="How do connect the outputs of an upstream analysis as inputs to Dymos?" class="md-nav__link">
+      How do connect the outputs of an upstream analysis as inputs to Dymos?
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../faq/downstream_analysis.html" title="How do connect the outputs of Dymos to a downstream analysis?" class="md-nav__link">
+      How do connect the outputs of Dymos to a downstream analysis?
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../faq/tandem_phases.html" title="How do I run two phases parallel-in-time?" class="md-nav__link">
+      How do I run two phases parallel-in-time?
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Dymos API Reference
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Dymos API Reference" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Dymos API Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../api/run_problem.html" title="The Dymos run_problem function" class="md-nav__link">
+      The Dymos run_problem function
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../api/phase_api.html" title="The Phase API" class="md-nav__link">
+      The Phase API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../api/trajectory_api.html" title="The Trajectory API" class="md-nav__link">
+      The Trajectory API
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../api/transcriptions_api.html" title="Dymos Transcriptions API" class="md-nav__link">
+      Dymos Transcriptions API
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Command Line Interface
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Command Line Interface" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Command Line Interface
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../command_line/command_line.html" title="Dymos Command Line Interface" class="md-nav__link">
+      Dymos Command Line Interface
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      Contributing
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Contributing
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../contributing/contributing.html" title="Contributing to Dymos" class="md-nav__link">
+      Contributing to Dymos
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-openmdao-model-of-the-ode" class="md-nav__link">
+    The OpenMDAO model of the ODE
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hello-world-propagating-the-dynamics" class="md-nav__link">
+    Hello World: Propagating the dynamics
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-happened" class="md-nav__link">
+    What happened?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-is-the-solution-different-from-the-simulation-results" class="md-nav__link">
+    Why is the solution different from the simulation results?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-solver-to-converge-the-physical-trajectory" class="md-nav__link">
+    Using a solver to converge the physical trajectory
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-an-optimization-driver-to-converge-the-physical-trajectory" class="md-nav__link">
+    Using an optimization driver to converge the physical trajectory
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#but-the-solution-still-doesnt-match-the-simulation" class="md-nav__link">
+    But the solution still doesn't match the simulation
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="modeling-dynamic-systems-with-dymos">Modeling Dynamic Systems with Dymos<a class="headerlink" href="#modeling-dynamic-systems-with-dymos" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p class="admonition-title">Things you'll learn through this example</p>
+<ul>
+<li>How to define a basic Dymos ODE system.</li>
+<li>How to explictly propagate the system from some initial state.</li>
+</ul>
+</div>
+<p>Dymos is a library for modeling dynamic systems and performing optimal
+control with the <a href="https://github.com/OpenMDAO/OpenMDAO">OpenMDAO</a> framework.
+Dynamic systems are typically defined by some set of ordinary
+differential equations (the ODE) which governs their behavior.</p>
+<p>Consider a simple damped harmonic oscillator.</p>
+<p><img alt="Damped harmonic oscillator free-body diagram" src="figures/spring_mass_damper.png" /></p>
+<div>
+<div class="MathJax_Preview">\begin{align}
+    \ddot{x} &amp;= -\frac{kx}{m} - - \frac{c \dot{x}}{m}
+\end{align}</div>
+<script type="math/tex; mode=display">\begin{align}
+    \ddot{x} &= -\frac{kx}{m} - - \frac{c \dot{x}}{m}
+\end{align}</script>
+</div>
+<p>Converting this to a first order system results in an ODE system with two states:</p>
+<div>
+<div class="MathJax_Preview">\begin{align}
+    \dot{x} &amp;= v \\
+    \dot{v} &amp;= -\frac{kx}{m} - \frac{c \dot{x}}{m}
+\end{align}</div>
+<script type="math/tex; mode=display">\begin{align}
+    \dot{x} &= v \\
+    \dot{v} &= -\frac{kx}{m} - \frac{c \dot{x}}{m}
+\end{align}</script>
+</div>
+<h2 id="the-openmdao-model-of-the-ode">The OpenMDAO model of the ODE<a class="headerlink" href="#the-openmdao-model-of-the-ode" title="Permanent link">&para;</a></h2>
+<p>In Dymos, the ODE is an OpenMDAO System (a Component, or a Group of components).
+The following ExplicitComponent computes the velocity rate for the damped harmonic oscillator.</p>
+<p>More detail on the workings of an ExplicitComponent can be found in the OpenMDAO documentation.  In summary, an ExplicitComponent used as part of an ODE in Dymos should override the following methods:</p>
+<ul>
+<li><strong>initialize</strong>:  Called at setup, and used to define options for the component.  <strong>ALL</strong> Dymos ODE components should have the property <code>num_nodes</code>, which defines the number of points at which the outputs are simultaneously computed.</li>
+<li><strong>setup</strong>: Used to add inputs and outputs to the component, and declare which outputs (and indices of outputs) are dependent on each of the inputs.</li>
+<li><strong>compute</strong>: Used to compute the outputs, given the inputs.</li>
+<li><strong>compute_partials</strong>: Used to compute the derivatives of the outputs w.r.t. each of the inputs analytically.  This method may be omitted if finite difference or complex-step approximations are used, though analytic is recommended.</li>
+</ul>
+<div class="tabbed-set" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">oscillator_ode.py</label><div class="tabbed-content"></div>
+</div>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38</pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">openmdao.api</span> <span class="k">as</span> <span class="nn">om</span>
+
+
+<span class="k">class</span> <span class="nc">OscillatorODE</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="n">ExplicitComponent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Dymos ODE for a damped harmonic oscillator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">declare</span><span class="p">(</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nn</span><span class="p">,),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;displacement&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nn</span><span class="p">,),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nn</span><span class="p">,),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;spring constant&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N/m&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nn</span><span class="p">,),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;damping coefficient&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N*s/m&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nn</span><span class="p">,),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;mass&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">)</span>
+
+        <span class="c1"># self.add_output(&#39;x_dot&#39;, val=np.zeros(nn), desc=&#39;rate of change of displacement&#39;, units=&#39;m/s&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="s1">&#39;v_dot&#39;</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nn</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;rate of change of velocity&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s**2&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">declare_partials</span><span class="p">(</span><span class="n">of</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">wrt</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fd&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">]</span>
+
+        <span class="n">f_spring</span> <span class="o">=</span> <span class="o">-</span><span class="n">k</span> <span class="o">*</span> <span class="n">x</span>
+        <span class="n">f_damper</span> <span class="o">=</span> <span class="o">-</span><span class="n">c</span> <span class="o">*</span> <span class="n">v</span>
+
+        <span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;v_dot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f_spring</span> <span class="o">+</span> <span class="n">f_damper</span><span class="p">)</span> <span class="o">/</span> <span class="n">m</span>
+</code></pre></div>
+</td></tr></table>
+
+<div class="admonition note">
+<p class="admonition-title">Things to note about the ODE system</p>
+<ul>
+<li>In this case, the ODE is a function of both states, but this isn't always the case.  If the dynamics aren't functions of some states, those states aren't needed as inputs.</li>
+<li>This ODE only computes the rate of change of velocity.  Since the rate of change of displacement can directly be obtained from another state variable, it doesn't need to be computed by the ODE.
+  This would also be true if the state's rate was a control, design parameter, or input parameter value.</li>
+<li>It's possible that we might want to use parameters <code>c</code>, <code>k</code>, and <code>m</code> as design variables at some point, so they're also included as inputs here.
+  Alternatively, if we had no interest in ever treating them as design variables, we could add their values as options to the ODE system in the <code>initialize</code> method.</li>
+</ul>
+</div>
+<h2 id="hello-world-propagating-the-dynamics">Hello World: Propagating the dynamics<a class="headerlink" href="#hello-world-propagating-the-dynamics" title="Permanent link">&para;</a></h2>
+<p>One of the first things one might be interested in regarding an ODE is propagating it from some given initial conditions.
+This is known as solving the initial value problem (IVP), and there are many software packages that can do this.
+The following is a minimal script that starts the system at some set of initial conditions and propagates them for some fixed duration.
+Some elements of this code will be explained later, but we'll hit the highlights now.</p>
+<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">script</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openmdao.api</span> <span class="k">as</span> <span class="nn">om</span>
+<span class="kn">import</span> <span class="nn">dymos</span> <span class="k">as</span> <span class="nn">dm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">switch_backend</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>  <span class="c1"># disable plotting to the screen</span>
+
+<span class="kn">from</span> <span class="nn">dymos.examples.oscillator.doc.oscillator_ode</span> <span class="kn">import</span> <span class="n">OscillatorODE</span>
+
+<span class="c1"># Instantiate an OpenMDAO Problem instance.</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">Problem</span><span class="p">()</span>
+
+<span class="c1"># Instantiate a Dymos Trajectory and add it to the Problem model.</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">()</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_subsystem</span><span class="p">(</span><span class="s1">&#39;traj&#39;</span><span class="p">,</span> <span class="n">traj</span><span class="p">)</span>
+
+<span class="c1"># Instantiate a Phase and add it to the Trajectory.</span>
+<span class="c1"># Here the transcription is necessary but not particularly relevant.</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">Phase</span><span class="p">(</span><span class="n">ode_class</span><span class="o">=</span><span class="n">OscillatorODE</span><span class="p">,</span> <span class="n">transcription</span><span class="o">=</span><span class="n">dm</span><span class="o">.</span><span class="n">Radau</span><span class="p">(</span><span class="n">num_segments</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">add_phase</span><span class="p">(</span><span class="s1">&#39;phase0&#39;</span><span class="p">,</span> <span class="n">phase</span><span class="p">)</span>
+
+<span class="c1"># Tell Dymos the states to be propagated using the given ODE.</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_state</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_state</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;v_dot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+
+<span class="c1"># The spring constant, damping coefficient, and mass are inputs to the system</span>
+<span class="c1"># that are constant throughout the phase.</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N/m&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">])</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N*s/m&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">])</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">])</span>
+
+<span class="c1"># Setup the OpenMDAO problem</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+<span class="c1"># Assign values to the times and states</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.t_initial&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.t_duration&#39;</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.states:x&#39;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.states:v&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:k&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:c&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:m&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1"># Perform a single execution of the model (executing the model is required before simulation).</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">run_model</span><span class="p">()</span>
+
+<span class="c1"># Perform an explicit simulation of our ODE from the initial conditions.</span>
+<span class="n">sim_out</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">times_per_seg</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Plot the state values obtained from the phase timeseries objects in the simulation output.</span>
+<span class="n">t_sol</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.timeseries.time&#39;</span><span class="p">)</span>
+<span class="n">t_sim</span> <span class="o">=</span> <span class="n">sim_out</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.timeseries.time&#39;</span><span class="p">)</span>
+
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">states</span><span class="p">):</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_sol</span><span class="p">,</span> <span class="n">prob</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;traj.phase0.timeseries.states:</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_sim</span><span class="p">,</span> <span class="n">sim_out</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;traj.phase0.timeseries.states:</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="n">sol</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sim</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;solution&#39;</span><span class="p">,</span> <span class="s1">&#39;simulation&#39;</span><span class="p">),</span> <span class="s1">&#39;lower right&#39;</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+</div>
+<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">output</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>Simulating trajectory traj
+Done simulating trajectory traj
+</code></pre></div>
+
+</div>
+</div>
+<h2 id="what-happened">What happened?<a class="headerlink" href="#what-happened" title="Permanent link">&para;</a></h2>
+<p>This script consists of the following general steps:</p>
+<ol>
+<li>After importing relevant packages, an OpenMDAO Problem is instantiated</li>
+<li>A Dymos Trajectory object is instantiated, and a single Phase named <code>'phase0'</code> is added to it.</li>
+<li>That Phase takes the ODE <em>class</em> as one of its arguments.  It will instantiate instances of it as needed.</li>
+<li>The transcription determines how the implicit integration and optimization are performed.  It's necessary but not particularly relevant in this example.</li>
+<li>The states to be integrated are added to the phase.</li>
+<li>Each state needs a rate source - an ODE-relative path of the output which provides the time derivative of the state variable.
+      For the rate_source of <code>x</code>, we provide <code>v</code>.  Dymos understands this is the name of one of the other states (or time, or controls, or parameters).</li>
+<li>Those states which are inputs to the ODE need to provide their targets in the ODE (again, with an ODE-relative path).</li>
+<li>The problem is setup (this prepares the model for execution in OpenMDAO).</li>
+<li>Default values are assigned to the states and time.</li>
+<li>Variables <code>t_initial</code> and <code>t_duration</code> (the initial time and duration of the Phase) are scalars.</li>
+<li>State variables are vectors whose values are provided throughout the Phase.  Here they're all being filled with a single value (10.0 for displacement, 0.0 for the velocity)</li>
+<li><code>Problem.run_model</code> is called.  This executes the Problem's <code>model</code> one time.  This is a necessary step before using the <code>Trajectory.simulate</code> method.</li>
+<li>The trajectory is simulated using the <code>simulate()</code> method and the results returned as an OpenMDAO Problem instance called <code>sim_out</code>.</li>
+<li>The states are plotted using values obtained from the <em>timeseries</em>.  Phases contain <code>_timeseries_</code> data that provides contiguous values regardless of the transcription used.</li>
+</ol>
+<p>Method <code>simulate</code> exists on both Trajectory and Phase objects.
+It uses the <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html">scipy.integrate.solve_ivp</a> function to propagate the states defined in each phase of the trajectory from their initial values at the initial time to some final value at <code>time = t_initial + t_duration</code>.</p>
+<p>In Dymos, the <code>simulate</code> method is useful for testing the functionality of an ODE (making sure it behaves as expected) and for checking the validity of answers after optimization.
+However, it cannot solve boundary value problems.</p>
+<h2 id="why-is-the-solution-different-from-the-simulation-results">Why is the solution different from the simulation results?<a class="headerlink" href="#why-is-the-solution-different-from-the-simulation-results" title="Permanent link">&para;</a></h2>
+<p>The plots above display both the solution from the implicit transcription (blue dots) and the results of the simulation (orange line).
+Here they do not match because we only performed a single execution of the model.
+<strong>The purpose of a model execution in Dymos is to calculate the objective and constraints for the optimizer.</strong>
+These constraints include the collocation <em>defect</em> constraints, which (when driven to zero) indicate that the current polynomial representation of the state-time history matches the physically correct trajectory.
+In this case, no iteration was performed, and thus the solution is not physically valid.</p>
+<p>To be clear, the output of Dymos in this case is not a physcially valid trajectory.
+The <code>simulate()</code> call after executing the model is the expected result using the variable step integrator from Scipy.</p>
+<p>There are two ways to converge this solution using the implicit transcription techniques in Dymos.
+1. We can run an optimization driver with some "dummy" objective to converge the collocation defect constraints.
+2. We can have Dymos use a nonlinear solver to vary the state time-history until the colloction defect constraints are satisfied.</p>
+<p>Traditionally, many collocation optimal control techniques have use an optimizer-based approach because it is extremely efficient.
+OpenMDAO provides a lot of versatility in adding in nonlinear solvers within the optimization problem.
+In our case, using a solver to converge state-time history means that the optimizer "sees" a physical trajectory at every iteration.
+In an optimization context, we can use the solver-based convergence of defects to obtain a shooting method with analytic derivatives.</p>
+<h2 id="using-a-solver-to-converge-the-physical-trajectory">Using a solver to converge the physical trajectory<a class="headerlink" href="#using-a-solver-to-converge-the-physical-trajectory" title="Permanent link">&para;</a></h2>
+<p>We let Dymos know that one or more states should be converged using the <code>solve_segments=True</code> argument.
+If passed to the transcription, it applies to all states.
+Otherwise, we can pass it only to certain states as an argument to <code>add_state</code> or <code>set_state_options</code>.</p>
+<div class="tabbed-set" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><label for="__tabbed_3_1">script</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openmdao.api</span> <span class="k">as</span> <span class="nn">om</span>
+<span class="kn">import</span> <span class="nn">dymos</span> <span class="k">as</span> <span class="nn">dm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">switch_backend</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>  <span class="c1"># disable plotting to the screen</span>
+
+<span class="kn">from</span> <span class="nn">dymos.examples.oscillator.doc.oscillator_ode</span> <span class="kn">import</span> <span class="n">OscillatorODE</span>
+
+<span class="c1"># Instantiate an OpenMDAO Problem instance.</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">Problem</span><span class="p">()</span>
+
+<span class="c1"># Instantiate a Dymos Trajectory and add it to the Problem model.</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">()</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_subsystem</span><span class="p">(</span><span class="s1">&#39;traj&#39;</span><span class="p">,</span> <span class="n">traj</span><span class="p">)</span>
+
+<span class="c1"># Instantiate a Phase and add it to the Trajectory.</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">Phase</span><span class="p">(</span><span class="n">ode_class</span><span class="o">=</span><span class="n">OscillatorODE</span><span class="p">,</span> <span class="n">transcription</span><span class="o">=</span><span class="n">dm</span><span class="o">.</span><span class="n">Radau</span><span class="p">(</span><span class="n">num_segments</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">solve_segments</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">add_phase</span><span class="p">(</span><span class="s1">&#39;phase0&#39;</span><span class="p">,</span> <span class="n">phase</span><span class="p">)</span>
+
+<span class="c1"># Tell Dymos the states to be propagated using the given ODE.</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_state</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">fix_initial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_state</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">fix_initial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;v_dot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+
+<span class="c1"># The spring constant, damping coefficient, and mass are inputs to the system that are</span>
+<span class="c1"># constant throughout the phase.</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N/m&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">])</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N*s/m&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">])</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">])</span>
+
+<span class="c1"># Setup the OpenMDAO problem</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+<span class="c1"># Assign values to the times and states</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.t_initial&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.t_duration&#39;</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.states:x&#39;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.states:v&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:k&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:c&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:m&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1"># Now we&#39;re using the optimization driver to iteratively run the model and vary the</span>
+<span class="c1"># phase duration until the final y value is 0.</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">run_model</span><span class="p">()</span>
+
+<span class="c1"># Perform an explicit simulation of our ODE from the initial conditions.</span>
+<span class="n">sim_out</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">times_per_seg</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Plot the state values obtained from the phase timeseries objects in the simulation output.</span>
+<span class="n">t_sol</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.timeseries.time&#39;</span><span class="p">)</span>
+<span class="n">t_sim</span> <span class="o">=</span> <span class="n">sim_out</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.timeseries.time&#39;</span><span class="p">)</span>
+
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">states</span><span class="p">):</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_sol</span><span class="p">,</span> <span class="n">prob</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;traj.phase0.timeseries.states:</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_sim</span><span class="p">,</span> <span class="n">sim_out</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;traj.phase0.timeseries.states:</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="n">sol</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sim</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;solution&#39;</span><span class="p">,</span> <span class="s1">&#39;simulation&#39;</span><span class="p">),</span> <span class="s1">&#39;lower right&#39;</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+</div>
+<input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><label for="__tabbed_3_2">output</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>Simulating trajectory traj
+Done simulating trajectory traj
+</code></pre></div>
+
+</div>
+</div>
+<h2 id="using-an-optimization-driver-to-converge-the-physical-trajectory">Using an optimization driver to converge the physical trajectory<a class="headerlink" href="#using-an-optimization-driver-to-converge-the-physical-trajectory" title="Permanent link">&para;</a></h2>
+<p>Alternatively, we can use an optimization driver to converge the state time histories.</p>
+<p>In the case of an initial value problem (fixed time duration, fixed initial states, and no controls or parameters as design variables) there are no
+degrees of freedom to optimize the problem, just single possible trajectory which satisfies the collocation constraints.</p>
+<p>In OpenMDAO (and thus Dymos) optimizers require an objective.
+Even though the initial time and duration of the phase are fixed, we provide the final time as a "dummy" objective here.</p>
+<div class="tabbed-set" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">script</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">openmdao.api</span> <span class="k">as</span> <span class="nn">om</span>
+<span class="kn">import</span> <span class="nn">dymos</span> <span class="k">as</span> <span class="nn">dm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">switch_backend</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>  <span class="c1"># disable plotting to the screen</span>
+
+<span class="kn">from</span> <span class="nn">dymos.examples.oscillator.doc.oscillator_ode</span> <span class="kn">import</span> <span class="n">OscillatorODE</span>
+
+<span class="c1"># Instantiate an OpenMDAO Problem instance.</span>
+<span class="n">prob</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">Problem</span><span class="p">()</span>
+
+<span class="c1"># We need an optimization driver.  To solve this simple problem ScipyOptimizerDriver will work.</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">driver</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">ScipyOptimizeDriver</span><span class="p">()</span>
+
+<span class="c1"># Instantiate a Dymos Trajectory and add it to the Problem model.</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">Trajectory</span><span class="p">()</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add_subsystem</span><span class="p">(</span><span class="s1">&#39;traj&#39;</span><span class="p">,</span> <span class="n">traj</span><span class="p">)</span>
+
+<span class="c1"># Instantiate a Phase and add it to the Trajectory.</span>
+<span class="n">phase</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">Phase</span><span class="p">(</span><span class="n">ode_class</span><span class="o">=</span><span class="n">OscillatorODE</span><span class="p">,</span> <span class="n">transcription</span><span class="o">=</span><span class="n">dm</span><span class="o">.</span><span class="n">Radau</span><span class="p">(</span><span class="n">num_segments</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">traj</span><span class="o">.</span><span class="n">add_phase</span><span class="p">(</span><span class="s1">&#39;phase0&#39;</span><span class="p">,</span> <span class="n">phase</span><span class="p">)</span>
+
+<span class="c1"># Tell Dymos that the duration of the phase is bounded.</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">set_time_options</span><span class="p">(</span><span class="n">fix_initial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fix_duration</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Tell Dymos the states to be propagated using the given ODE.</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_state</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">fix_initial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_state</span><span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">fix_initial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rate_source</span><span class="o">=</span><span class="s1">&#39;v_dot&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;m/s&#39;</span><span class="p">)</span>
+
+<span class="c1"># The spring constant, damping coefficient, and mass are inputs to the system that are</span>
+<span class="c1"># constant throughout the phase.</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N/m&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;k&#39;</span><span class="p">])</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;N*s/m&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">])</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_parameter</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;m&#39;</span><span class="p">])</span>
+
+<span class="c1"># Since we&#39;re using an optimization driver, an objective is required.  We&#39;ll minimize</span>
+<span class="c1"># the final time in this case.</span>
+<span class="n">phase</span><span class="o">.</span><span class="n">add_objective</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">)</span>
+
+<span class="c1"># Setup the OpenMDAO problem</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+<span class="c1"># Assign values to the times and states</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.t_initial&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.t_duration&#39;</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.states:x&#39;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.states:v&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:k&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:c&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">set_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.parameters:m&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1"># Now we&#39;re using the optimization driver to iteratively run the model and vary the</span>
+<span class="c1"># phase duration until the final y value is 0.</span>
+<span class="n">prob</span><span class="o">.</span><span class="n">run_driver</span><span class="p">()</span>
+
+<span class="c1"># Perform an explicit simulation of our ODE from the initial conditions.</span>
+<span class="n">sim_out</span> <span class="o">=</span> <span class="n">traj</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">times_per_seg</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Plot the state values obtained from the phase timeseries objects in the simulation output.</span>
+<span class="n">t_sol</span> <span class="o">=</span> <span class="n">prob</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.timeseries.time&#39;</span><span class="p">)</span>
+<span class="n">t_sim</span> <span class="o">=</span> <span class="n">sim_out</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="s1">&#39;traj.phase0.timeseries.time&#39;</span><span class="p">)</span>
+
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">states</span><span class="p">):</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_sol</span><span class="p">,</span> <span class="n">prob</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;traj.phase0.timeseries.states:</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_sim</span><span class="p">,</span> <span class="n">sim_out</span><span class="o">.</span><span class="n">get_val</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;traj.phase0.timeseries.states:</span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="n">sol</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sim</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;solution&#39;</span><span class="p">,</span> <span class="s1">&#39;simulation&#39;</span><span class="p">),</span> <span class="s1">&#39;lower right&#39;</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+
+</div>
+<input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><label for="__tabbed_4_2">output</label><div class="tabbed-content">
+<div class="highlight"><pre><span></span><code>Optimization terminated successfully.    (Exit mode 0)
+            Current function value: 15.0
+            Iterations: 1
+            Function evaluations: 2
+            Gradient evaluations: 1
+Optimization Complete
+-----------------------------------
+
+Simulating trajectory traj
+Done simulating trajectory traj
+</code></pre></div>
+
+</div>
+</div>
+<h2 id="but-the-solution-still-doesnt-match-the-simulation">But the solution still doesn't match the simulation<a class="headerlink" href="#but-the-solution-still-doesnt-match-the-simulation" title="Permanent link">&para;</a></h2>
+<p>If you look at the plots from the last two examples, you'll notice that the state time-history from the solution has some pretty significant deviations from the simulation results.
+This is an important lesson in using implicit collocation techniques.</p>
+<div class="admonition warning">
+<p class="admonition-title">A converged trajectory isn't necessarily correct</p>
+</div>
+<p>As we mentioned before, the <code>simulate()</code> method exists to provide a check on a converged trajectory.
+In this case, the trajectory found using <code>simulate()</code> doesn't really interpolate the solution from the collocation technique.
+In the next section, we'll explain how to deal with this.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../defining_odes.html" title="Defining ODEs" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Defining ODEs
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="intro_segments.html" title="Segments of Phases" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Segments of Phases
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.df0def68.min.js"></script>
+      <script src="../../assets/javascripts/bundle.ba57d267.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.5eca75d3.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>
