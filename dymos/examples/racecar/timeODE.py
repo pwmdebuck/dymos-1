@@ -20,7 +20,6 @@ class TimeODE(om.ExplicitComponent):
         self.add_input('aydot', val=np.zeros(nn), desc='lateral jerk', units='m/s**3')
 
         #outputs
-        #self.add_output('ds_ds', val=np.zeros(nn), desc='distance perpendicular to centerline', units='m/m')
         self.add_output('dn_ds', val=np.zeros(nn), desc='distance perpendicular to centerline', units='m/m')
         self.add_output('dalpha_ds', val=np.zeros(nn), desc='angle relative to centerline', units='rad/m')
         self.add_output('dV_ds', val=np.zeros(nn), desc='speed', units='1/s')
@@ -73,7 +72,6 @@ class TimeODE(om.ExplicitComponent):
         outputs['dn_ds'] = ndot/sdot
         outputs['dax_ds'] = axdot/sdot
         outputs['day_ds'] = aydot/sdot
-        #outputs['ds_ds'] = 1
 
     def compute_partials(self, inputs, jacobian):
         omegadot = inputs['omegadot']

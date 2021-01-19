@@ -2,6 +2,7 @@ import openmdao.api as om
 import numpy as np
 
 class TimeAdder(om.ExplicitComponent):
+    #This serves to keep track of the elapsed time. Since we performed a change of variables we need to integrate time by adding dt/ds
 
     def initialize(self):
         self.options.declare('num_nodes', types=int)

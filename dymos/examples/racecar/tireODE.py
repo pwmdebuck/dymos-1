@@ -10,12 +10,12 @@ class TireODE(om.ExplicitComponent):
         nn = self.options['num_nodes']
 
         #constants
-        self.add_input('M', val=1184.0, desc='mass', units='kg')
+        self.add_input('M', val=0.0, desc='mass', units='kg')
         self.add_input('g', val=9.8, desc='mass', units='m/s**2') #N
-        self.add_input('a', val=1.404, desc='cg to front distance', units='m')
-        self.add_input('b', val=1.356, desc='cg to rear distance', units='m')
-        self.add_input('tw', val=0.807, desc='half track width', units='m')
-        self.add_input('beta', val=0.62, desc='braking bias', units=None) #val = 0.62
+        self.add_input('a', val=1.8, desc='cg to front distance', units='m')
+        self.add_input('b', val=1.6, desc='cg to rear distance', units='m')
+        self.add_input('tw', val=0.73, desc='half track width', units='m')
+        self.add_input('beta', val=0.0, desc='braking bias', units=None) #val = 0.62
         self.add_input('k_lambda', val=44.0, desc='tire lateral stiffness', units=None)
 
         #states
@@ -41,32 +41,17 @@ class TireODE(om.ExplicitComponent):
         self.add_output('F_rr', val=np.zeros(nn), desc='lateral force rr', units='N')
 
         #controls
-        self.add_input('thrustFL', val=np.zeros(nn), desc='thrust', units=None)
-        self.add_input('thrustFR', val=np.zeros(nn), desc='thrust', units=None)
-        self.add_input('thrustRL', val=np.zeros(nn), desc='thrust', units=None)
-        self.add_input('thrustRR', val=np.zeros(nn), desc='thrust', units=None)
-
-        # self.add_input('throttle', val=np.zeros(nn), desc='throttle', units=None)
-        # self.add_input('brake', val=np.zeros(nn), desc='brake', units=None)
+        self.add_input('thrust', val=np.zeros(nn), desc='thrust', units=None)
         self.add_input('delta', val=np.zeros(nn), desc='steering angle', units='rad')
 
 
         # Setup partials
         arange = np.arange(self.options['num_nodes'], dtype=int)
 
-        #sdot
-        # self.declare_partials(of='S_fl', wrt='brake', rows=arange, cols=arange)
-        # self.declare_partials(of='S_fr', wrt='brake', rows=arange, cols=arange)
-        # self.declare_partials(of='S_rl', wrt='brake', rows=arange, cols=arange)
-        # self.declare_partials(of='S_rr', wrt='brake', rows=arange, cols=arange)
-
-        # self.declare_partials(of='S_rl', wrt='throttle', rows=arange, cols=arange)
-        # self.declare_partials(of='S_rr', wrt='throttle', rows=arange, cols=arange)
-
-        self.declare_partials(of='S_fl', wrt='thrustFL', rows=arange, cols=arange)
-        self.declare_partials(of='S_fr', wrt='thrustFR', rows=arange, cols=arange)
-        self.declare_partials(of='S_rl', wrt='thrustRL', rows=arange, cols=arange)
-        self.declare_partials(of='S_rr', wrt='thrustRR', rows=arange, cols=arange)
+        self.declare_partials(of='S_fl', wrt='thrust', rows=arange, cols=arange)
+        self.declare_partials(of='S_fr', wrt='thrust', rows=arange, cols=arange)
+        self.declare_partials(of='S_rl', wrt='thrust', rows=arange, cols=arange)
+        self.declare_partials(of='S_rr', wrt='thrust', rows=arange, cols=arange)
 
         self.declare_partials(of='F_rr',wrt='V',rows=arange,cols=arange)
         self.declare_partials(of='F_rr',wrt='lambda',rows=arange,cols=arange)
@@ -91,9 +76,6 @@ class TireODE(om.ExplicitComponent):
         self.declare_partials(of='F_fr',wrt='delta',rows=arange,cols=arange)
         self.declare_partials(of='F_fl',wrt='delta',rows=arange,cols=arange)
 
-
-
-
     def compute(self, inputs, outputs):
         omega = inputs['omega']
         V = inputs['V']
@@ -107,45 +89,22 @@ class TireODE(om.ExplicitComponent):
         N_rl = inputs['N_rl']
         N_fr = inputs['N_fr']
         N_fl = inputs['N_fl']
-        #throttle = inputs['throttle']
         delta = inputs['delta']
         beta = inputs['beta']
-        #brake = inputs['brake']
         k_lambda = inputs['k_lambda']
-        thrustFL = inputs['thrustFL']
-        thrustFR = inputs['thrustFR']
-        thrustRL = inputs['thrustRL']
-        thrustRR = inputs['thrustRR']
+        thrust = inputs['thrust']
 
-        # outputs['S_fl'] = -(M*g/2)*brake*beta
-        # outputs['S_fr'] = -(M*g/2)*brake*beta
-        # outputs['S_rl'] = (M*g/2)*(throttle-brake*(1-beta))
-        # outputs['S_rr'] = (M*g/2)*(throttle-brake*(1-beta))
+        #split thrust signal into a throttle and brake signal
+        signs = np.sign(thrust)
+        signs2 = np.where(signs<1,0,1)
 
-        # signsFL = np.sign(thrustFL)
-        # signs2FL = np.where(signsFL<1,0,1)
-        # brakeFL = (signs2FL-1)*thrustFL #postive
-        # throttleFL = signs2FL*thrustFL
+        brake = (signs2-1)*thrust #postive
+        throttle = signs2*thrust
 
-        # signsFR = np.sign(thrustFR)
-        # signs2FR = np.where(signsFR<1,0,1)
-        # brakeFR = (signs2FR-1)*thrustFR #postive
-        # throttleFR = signs2FR*thrustFR
-
-        # signsRL = np.sign(thrustRL)
-        # signs2RL = np.where(signsRL<1,0,1)
-        # brakeRL = (signs2RL-1)*thrustRL #postive
-        # throttleRL = signs2RL*thrustRL
-
-        # signsRR = np.sign(thrustRR)
-        # signs2RR = np.where(signsRR<1,0,1)
-        # brakeRR = (signs2RR-1)*thrustRR #postive
-        # throttleRR = signs2RR*thrustRR
-
-        outputs['S_fl'] = (M*g/4)*thrustFL
-        outputs['S_fr'] = (M*g/4)*thrustFR
-        outputs['S_rl'] = (M*g/4)*thrustRL
-        outputs['S_rr'] = (M*g/4)*thrustRR
+        outputs['S_fl'] = -(M*g/2)*brake*beta
+        outputs['S_fr'] = -(M*g/2)*brake*beta
+        outputs['S_rl'] = (M*g/2)*(throttle-brake*(1-beta))
+        outputs['S_rr'] = (M*g/2)*(throttle-brake*(1-beta))
 
         outputs['F_rr'] = N_rr*k_lambda*(lamb+(omega*(b+lamb*tw))/V)
         outputs['F_rl'] = N_rl*k_lambda*(lamb+(omega*(b-lamb*tw))/V)
@@ -165,44 +124,21 @@ class TireODE(om.ExplicitComponent):
         N_rl = inputs['N_rl']
         N_fr = inputs['N_fr']
         N_fl = inputs['N_fl']
-        #throttle = inputs['throttle']
         delta = inputs['delta']
         beta = inputs['beta']
-        #brake = inputs['brake']
         k_lambda = inputs['k_lambda']
-        thrustFL = inputs['thrustFL']
-        thrustFR = inputs['thrustFR']
-        thrustRL = inputs['thrustRL']
-        thrustRR = inputs['thrustRR']
+        thrust = inputs['thrust']
 
-        # signsFL = np.sign(thrustFL)
-        # signs2FL = np.where(signsFL<1,0,1)
-        # brakeFL = (signs2FL-1) #postive
-        # throttleFL = signs2FL
+        signs = np.sign(thrust)
+        signs2 = np.where(signs<1,0,1) #-1 where brake is active
 
-        # signsFR = np.sign(thrustFR)
-        # signs2FR = np.where(signsFR<1,0,1)
-        # brakeFR = (signs2FR-1) #postive
-        # throttleFR = signs2FR
+        brake = (signs2-1) #positive
+        throttle = signs2
 
-        # signsRL = np.sign(thrustRL)
-        # signs2RL = np.where(signsRL<1,0,1)
-        # brakeRL = (signs2RL-1) #postive
-        # throttleRL = signs2RL
-
-        # signsRR = np.sign(thrustRR)
-        # signs2RR = np.where(signsRR<1,0,1)
-        # brakeRR = (signs2RR-1) #postive
-        # throttleRR = signs2RR
-
-        # jacobian['S_fl', 'thrustFL'] = -(M*g/2)*beta*brakeFL+(M*g/2)*throttleFL
-        # jacobian['S_fr', 'thrustFR'] = -(M*g/2)*beta*brakeFR+(M*g/2)*throttleFR
-        # jacobian['S_rl', 'thrustRL'] = -(M*g/2)*(1-beta)*brakeRL+(M*g/2)*throttleRL
-        # jacobian['S_rr', 'thrustRR'] = -(M*g/2)*(1-beta)*brakeRR+(M*g/2)*throttleRR
-        jacobian['S_fl', 'thrustFL'] = (M*g/4)
-        jacobian['S_fr', 'thrustFR'] = (M*g/4)
-        jacobian['S_rl', 'thrustRL'] = (M*g/4)
-        jacobian['S_rr', 'thrustRR'] = (M*g/4)
+        jacobian['S_fl', 'thrust'] = -(M*g/2)*beta*brake
+        jacobian['S_fr', 'thrust'] = -(M*g/2)*beta*brake
+        jacobian['S_rl', 'thrust'] = -(M*g/2)*(1-beta)*brake+(M*g/2)*throttle
+        jacobian['S_rr', 'thrust'] = -(M*g/2)*(1-beta)*brake+(M*g/2)*throttle
 
         jacobian['F_rr','N_rr'] = k_lambda*(lamb+(omega*(b+lamb*tw))/V)
         jacobian['F_rl','N_rl'] = k_lambda*(lamb+(omega*(b-lamb*tw))/V)

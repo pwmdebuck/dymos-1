@@ -1,24 +1,19 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy import interpolate
 from scipy import signal
 from Track import Track
-import tracks
 import copy
 
-points = [(3.28,0.00),(4.00,0.50),(4.40,1.0),(4.60,1.52),(5.00,2.5),(5.00,3.34),(4.70,3.8),(4.50,3.96),(4.20,4.0),(3.70,3.90),(3.00,3.5),(2.00,2.9)]
-data = np.array(points)
-track = tracks.Spa
+#A set of functions that fit splines to the track.
 
-def getTrackPoints(track):
+def getTrackPoints(track,initial_direction=np.array([1,0])):
+	#given a track description, place nodes along the centerlines in order to fit a spline through them. Nodes are denser around corners
 	pos = np.array([0,0])
-	direction = np.array([1,0])
+	direction = initial_direction
 
 	points = [[0,0]]
 
 	for i in range(len(track.segments)):
-	# for i in range(3):
-		# points.append([pos[0], pos[1]])
 		radius = track.getSegmentRadius(i)
 		length = track.getSegmentLength(i)
 		if radius==0:
@@ -28,20 +23,7 @@ def getTrackPoints(track):
 			for j in range(1,length.astype(int)-1):
 				if j%5==0:
 					points.append(pos+direction*j)
-			# if length>400:
-			# 	points.append(pos+direction*(length/6))
-			# 	points.append(pos+direction*(2*length/6))
-			# 	points.append(pos+direction*(3*length/6))
-			# 	points.append(pos+direction*(4*length/6))
-			# 	points.append(pos+direction*(5*length/6))
-			# if length>250:
-			# 	points.append(pos+direction*(length/4))
-			# 	points.append(pos+direction*(2*length/4))
-			# 	points.append(pos+direction*(3*length/4))
-			# 	points.append(pos+direction*(15*length/16))
-			# elif length>50:
-			# 	points.append(pos+direction*(length/2))
-			# 	points.append(pos+direction*(15*length/16))
+
 			pos = endpoint
 		else:
 			#corner
@@ -65,23 +47,13 @@ def getTrackPoints(track):
 			theta_vector = np.linspace(theta_0, theta_end, 100)
 
 			x,y = parametric_circle(theta_vector, xc, yc, radius)
-			# points.append([x[0],y[0]])
-			# # if length>2.0:
+
 			for j in range(len(x)):
 				if j%10 == 0:
 					points.append([x[j],y[j]])
-			# #if length>0.6:
-			# # 	points.append([x[25],y[25]])
-			# # 	points.append([x[50],y[50]])
-			# # 	points.append([x[75],y[j]])
-			# #else:
-			# points.append([x[50],y[50]])
-			# # points.append([x[-1],y[-1]])
 			
 			pos = np.array([x[-1],y[-1]])
 			
-	# plt.axis('equal')
-	# points.append([0,0])
 	return np.array(points)
 
 def parametric_circle(t,xc,yc,R):
@@ -89,21 +61,8 @@ def parametric_circle(t,xc,yc,R):
     y = yc + R*np.sin(t)
     return x,y
 
-points = getTrackPoints(track)
-data = np.array(points)
-# for i in range(len(points)):
-# 	plt.plot(points[i][0],points[i][1],'o')
-# plt.show()
-
-tck,u = interpolate.splprep(data.transpose(), s=0, k=3)
-unew = np.arange(0, 1.0, 0.0001)
-out = interpolate.splev(unew, tck)
-
-gates = interpolate.splev(u, tck)
-gatesd = interpolate.splev(u, tck, der = 1)
-
-
-def getSpline(points,interval=0.00001,s=0.3):
+def getSpline(points,interval=0.0001,s=0.0):
+	#this function fits the spline
 	tck,u = interpolate.splprep(points.transpose(),s=s, k=5)
 	unew = np.arange(0, 1.0, interval)
 	finespline = interpolate.splev(unew, tck)
@@ -117,16 +76,6 @@ def getSpline(points,interval=0.00001,s=0.3):
 
 	return finespline,gates,gatesd,curv,single
 
-def getSplineLength(spline):
-	length = 0
-	for i in range(1,len(spline[0])):
-		prevpoint = [spline[0][i-1],spline[1][i-1]]
-		currpoint = [spline[0][i],spline[1][i]]
-		dx = np.sqrt((currpoint[0]-prevpoint[0])**2+(currpoint[1]-prevpoint[1])**2)
-		length = length+dx
-	return length
-
-
 def getGateNormals(gates,gatesd):
 	normals = []
 	for i in range(len(gates[0])):
@@ -136,8 +85,6 @@ def getGateNormals(gates,gatesd):
 		normal2 = [der[1]/mag,-der[0]/mag]
 
 		normals.append([normal1,normal2])
-		# plt.plot([gates[0][i],gates[0][i]+normal1[0]],[gates[1][i],gates[1][i]+normal1[1]],'g',linewidth=3)
-		# plt.plot([gates[0][i],gates[0][i]+normal2[0]],[gates[1][i],gates[1][i]+normal2[1]],'b',linewidth=3)
 
 	return normals
 
@@ -171,78 +118,6 @@ def setGateDisplacements(gateDisplacements,gates,normals):
 		newgates[0][i] = newgates[0][i] + disp*normal[0]
 		newgates[1][i] = newgates[1][i] + disp*normal[1]
 	return newgates
-
-
-
-# def getCurvature(points):
-
-# 	# curvature = [0]
-# 	# for i in range(1,len(points[0])):
-# 	# 	point1 = [points[0][i-1],points[1][i-1]]
-# 	# 	point2 = [points[0][i],points[1][i]]
-# 	# 	if i == len(points[0])-1:
-# 	# 		# point3 = [points[0][0],points[1][0]]
-# 	# 		curvature.append(curvature[-1])
-# 	# 		continue
-# 	# 	else:
-# 	# 		point3 = [points[0][i+1],points[1][i+1]]
-
-# 	# 	side1 = getLength(point1,point2)
-# 	# 	side2 = getLength(point1,point3)
-# 	# 	side3 = getLength(point2,point3)
-
-# 	# 	area = getArea(point1,point2,point3)
-
-# 	# 	if side1 == 0 or side2 == 0 or side3 == 0 or area == 0:
-# 	# 		curvature.append(0)
-# 	# 	else:
-# 	# 		curv = 4*area/(side1*side2*side3)
-# 	# 		curvature.append(curv)
-# 	# return curvature
-
-def getArea(point1,point2,point3):
-	area = np.abs(0.5*(point1[0]*point2[1]+point2[0]*point3[1]+point3[0]*point1[1]-point1[1]*point2[0]-point2[1]*point3[0]-point3[1]*point1[0]))
-	# area = ((point2[0]-point1[0])*(point3[1]-point1[1]) - (point2[1]-point1[1])*(point3[0]-point1[0]))
-	return np.abs(area)
-
-def getLength(point1,point2):
-	return np.sqrt((point1[0]-point2[0])**2+(point1[1]-point2[1])**2)
-
-def getApex(curvature):
-	apex = signal.find_peaks(curvature,height=0.005,distance=40)
-	return apex
-
-
-# curv2 = []
-# for i in range(len(curv[0])):
-# 	curv2.append(np.sqrt(curv[0][i]**2+curv[1][i]**2))
-
-# fig = plt.figure()
-# ax = fig.add_subplot(111)
-# curvature = getCurvature(out)
-# plt.plot(length_vector,curvature)
-# plt.ylim(0,250)
-# plt.show()
-
-
-# apex = apex[0]
-# for i in range(len(apex)):
-# 	index = apex[i]
-# 	plt.plot(length_vector[index],curvature[index],'o')
-# # ax.plot(length_vector,curv2)
-# # ax.set_ybound(-0.1,0.1)
-# plt.show()
-# print(getGateNormals(gates,gatesd))
-
-# plt.figure()
-# # # plt.ylim((-0.1,0.1))
-# # # plt.show()
-
-# plt.plot(out[0], out[1], color='orange')
-# plt.plot(gates[0], gates[1],'o', color='blue')
-# plt.show()
-
-
 
 
 

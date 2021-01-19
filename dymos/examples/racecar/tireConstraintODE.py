@@ -12,10 +12,10 @@ class TireConstraintODE(om.ExplicitComponent):
         #constants
         self.add_input('mu0_y', val=1.68, desc='lateral friction coefficient', units=None)
         self.add_input('mu0_x', val=1.68, desc='longitudinal friction coefficient', units=None)
-        self.add_input('k_mu',val=-0.5, desc='tire load sensitivity',units=None)
-        self.add_input('a', val=1.404, desc='cg to front distance', units='m')
-        self.add_input('b', val=1.356, desc='cg to rear distance', units='m')
-        self.add_input('M', val=1184.0, desc='mass', units='kg')
+        self.add_input('k_mu',val=-0.0, desc='tire load sensitivity',units=None)
+        self.add_input('a', val=1.8, desc='cg to front distance', units='m')
+        self.add_input('b', val=1.6, desc='cg to rear distance', units='m')
+        self.add_input('M', val=0.0, desc='mass', units='kg')
         self.add_input('g', val=9.8, desc='mass', units='m/s**2')
 
         #states
